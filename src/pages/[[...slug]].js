@@ -39,7 +39,7 @@ export default function Home({ UUID }) {
 }
 
 export const getStaticPaths = () => {
-  const paths = ["/en", "/fr", "/"];
+  const paths = ["/en/crash", "/fr/crash", "/crash"];
 
   return {
     paths,
