@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import crypto from "crypto";
+import { readFromFs, writeToFs } from "../utils/fsCache";
 
 export default function Home({ UUID }) {
   return (
@@ -38,8 +39,28 @@ export default function Home({ UUID }) {
   );
 }
 
+export const getStaticPaths = async () => {
+  const paths = await resolveStaticPaths();
+
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
 export function getStaticProps() {
-  const UUID = crypto.randomUUID();
+  const UUID = readFromFs({ fileName: "UUID" });
 
   return { props: { UUID } };
 }
+
+const resolveStaticPaths = async () => {
+  if (process.env.NODE_ENV === "development") {
+    const cachedUUID = readFromFs({ fileName: "UUID", muteErrorLog: true });
+
+    if (!cachedUUID)
+      await writeToFs({ fileName: "UUID", content: crypto.randomUUID() });
+  }
+
+  return ["/en/crash", "/fr/crash", "/crash"];
+};
