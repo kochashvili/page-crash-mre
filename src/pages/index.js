@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import crypto from "crypto";
+import Link from "next/link";
 
 export default function Home({ UUID }) {
   return (
@@ -18,7 +18,10 @@ export default function Home({ UUID }) {
         </h1>
 
         <p className={styles.description}>
-          Static prop UUID: <code className={styles.code}>{UUID}</code>
+          Navigate to{" "}
+          <code className={styles.code}>
+            <Link href="/crash">/crash</Link>
+          </code>
         </p>
 
         <div className={styles.grid}>
@@ -66,10 +69,4 @@ export default function Home({ UUID }) {
       </footer>
     </div>
   );
-}
-
-export function getStaticProps() {
-  const UUID = crypto.randomUUID();
-
-  return { props: { UUID } };
 }
