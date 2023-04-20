@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import crypto from "crypto";
 
 export default function Home({ UUID }) {
@@ -14,7 +14,7 @@ export default function Home({ UUID }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js SSG Page!</a>
+          Welcome to <a href="https://nextjs.org">Next.js ISR Page!</a>
         </h1>
 
         <p className={styles.description}>
@@ -38,17 +38,17 @@ export default function Home({ UUID }) {
   );
 }
 
-export const getStaticPaths = () => {
-  const paths = ["/en/crash", "/fr/crash", "/crash"];
-
+export async function getStaticPaths() {
   return {
-    paths,
-    fallback: false,
+    paths: [],
+    fallback: true,
   };
-};
+}
 
 export function getStaticProps() {
   const UUID = crypto.randomUUID();
 
-  return { props: { UUID } };
+  console.log("revalidating", UUID);
+
+  return { props: { UUID }, revalidate: 30 };
 }

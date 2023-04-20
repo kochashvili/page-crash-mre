@@ -3,21 +3,26 @@ import { NextResponse } from "next/server";
 const PUBLIC_FILE = /\.(.*)$/;
 
 export function middleware(request) {
-  const shouldHandleLocale =
-    !PUBLIC_FILE.test(request.nextUrl.pathname) &&
-    !request.nextUrl.pathname.includes("/api/");
   const url = request.nextUrl;
+  const locale = url.locale === "default" ? "en" : url.locale;
+  const pathname = decodeURI(url.pathname).toLowerCase();
+  const isInternal =
+    pathname.startsWith("/_next") || PUBLIC_FILE.test(pathname);
 
-  if (shouldHandleLocale) {
-    const locale = url.locale === "default" ? "en" : url.locale;
-    const pathname = decodeURI(url.pathname).toLowerCase();
+  console.log(
+    `mdw req url: ${url}, pathname: ${pathname}, isInternal: ${isInternal}`
+  );
 
-    if (decodeURI(url.pathname) !== pathname || url.locale !== locale) {
-      return NextResponse.redirect(
-        encodeURI(`${url.origin}/${locale}${pathname}${url.search}`)
-      );
-    }
+  if (
+    !isInternal &&
+    (decodeURI(url.pathname) !== pathname || url.locale !== locale)
+  ) {
+    return NextResponse.redirect(
+      encodeURI(`${url.origin}/${locale}${pathname}${url.search}`)
+    );
   }
-
-  return NextResponse.next();
 }
+
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
