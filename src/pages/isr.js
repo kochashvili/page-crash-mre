@@ -14,7 +14,7 @@ export default function Home({ UUID }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js SSG Page!</a>
+          Welcome to <a href="https://nextjs.org">Next.js ISR Page!</a>
         </h1>
 
         <p className={styles.description}>
@@ -38,17 +38,19 @@ export default function Home({ UUID }) {
   );
 }
 
-export const getStaticPaths = () => {
-  const paths = ["/en/crash", "/fr/crash", "/crash"];
+// export const getStaticPaths = () => {
+//   const paths = ["/en/crash", "/fr/crash", "/crash"];
 
-  return {
-    paths,
-    fallback: false,
-  };
-};
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// };
 
 export function getStaticProps() {
   const UUID = crypto.randomUUID();
 
-  return { props: { UUID } };
+  console.log("revalidating", UUID);
+
+  return { props: { UUID }, revalidate: 30 };
 }
