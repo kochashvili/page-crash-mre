@@ -38,14 +38,12 @@ export default function Home({ UUID }) {
   );
 }
 
-// export const getStaticPaths = () => {
-//   const paths = ["/en/crash", "/fr/crash", "/crash"];
-
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  };
+}
 
 export function getStaticProps() {
   const UUID = crypto.randomUUID();
